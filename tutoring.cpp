@@ -1,5 +1,6 @@
 ﻿#include<stdio.h>
-#pragma warning(disable:4996)
+#include<math.h>
+
 /*
 	2022년 4월 8일 튜터링 요약 : 프로그래밍 작성과정, 변수와 자료형
 
@@ -92,19 +93,127 @@
 	또한, 우리가 배우는 문법은 C이다. 나중에 C#, C++, java, python 등. 다른 언어를 2, 3, 4학년 때 듣게 될 것이다.
 	내가 지금 배우고 있는 C#, C++은 C의 개념만 확실히 알고있다면 달라진 문법만 잡으면 쓰는데 부담이 없는 수준이다. (그 만큼 C의 문법과 개념이 중요하다.)
 	그리고 python은 3학년 친구들한테 듣길 C의 들여쓰기 방식을 문법으로 만들었기 때문에 그만큼 C의 코딩스타일을 확실히 잡아야 유리하다는 것을 알수 있겠지?  
+
+	2022년 4월 22일 튜터링 내용 : 
+
+	튜티들이 풀다가 질문했던 문제를 풀어서 알려주었다.
+	ascode.org -> 대회 -> 2022학년도 1학기 프로그래밍실습 중간고사 대비용에서의 F, G, H에 대해 알아보자.
+
+	F문제 : 문자 쌍 출력하기
+
+const int CONVERT = 32; // 대문자 <-> 소문자
+
+int main() 
+{
+	int testcase, ascii1, ascii2;
+	bool upper1, upper2, lower1, lower2, isalphabet1, isalphabet2;
+
+	scanf("%d", &testcase);
+
+	while (testcase--)
+	{
+		scanf("%d %d", &ascii1, &ascii2);
+
+		upper1 = (ascii1 >= 'A' && ascii1 <= 'Z');
+		lower1 = (ascii1 >= 'a' && ascii1 <= 'z');
+		upper2 = (ascii2 >= 'A' && ascii2 <= 'Z');
+		lower2 = (ascii2 >= 'a' && ascii2 <= 'z');
+
+		isalphabet1 = (upper1 || lower1);
+		isalphabet2 = (upper2 || lower2);
+
+		if (isalphabet1 && isalphabet2)
+		{
+			if (upper1 && upper2)
+			{
+				ascii1 += CONVERT;
+				ascii2 += CONVERT;
+			}
+			else if (lower1 && lower2)
+			{
+				ascii1 -= CONVERT;
+				ascii2 -= CONVERT;
+			}
+			printf("%c%c\n", ascii1, ascii2);
+		}
+		else printf("No Alphabet!\n");
+	}
+	return 0;
+}
+
+	문제 G : 로또 추천 번호 판정하기
+
+int main() 
+{
+	int num1, num2, num3, num4, num5, num6, sum, count, odd;
+
+	scanf("%d %d %d %d %d %d", &num1, &num2, &num3, &num4, &num5, &num6);
+
+	odd = count = 0;
+	sum = num1 + num2 + num3 + num4 + num5 + num6;
+
+	if (num1 % 2 == 1) odd++;
+	if (num2 % 2 == 1) odd++;
+	if (num3 % 2 == 1) odd++;
+	if (num4 % 2 == 1) odd++;
+	if (num5 % 2 == 1) odd++;
+	if (num6 % 2 == 1) odd++;
+
+	if (sum >= 91 && sum <= 180) count++;
+	if (odd >= 2 && odd <= 4)count++;
+
+	if (count == 2) printf("BEST");
+	else if (count == 1)printf("GOOD");
+	else printf("BAD");
+
+	return 0;
+}
+
+	문제 H : 2차 방정식 근의 판별
+int main()
+{
+	double a, b, c, valueN, value, bigvalue, smallvalue;
+
+	scanf("%lf %lf %lf", &a, &b, &c);
+
+	valueN = b * b - 4 * a * c;
+
+	if (valueN < 0) printf("imaginary");
+
+	else
+	{
+		if (valueN == 0)
+		{
+			value = -b / (2 * a);
+
+			printf("%.4lf", value);
+		}
+		else
+		{
+			value = sqrt(valueN);
+			bigvalue = (-b + value) / (2 * a);
+			smallvalue = (-b - value) / (2 * a);
+
+			printf("%.4lf %.4lf", bigvalue, smallvalue);
+		}
+	}
+	return 0;
+}
+
+	2022년 4월 22일 튜터링 요약 : 위 코드처럼 남들이 봤을 때 바로 이해되게 하는 것이 나중을 위해 중요하다.
+	위 처럼 만들러면 1. 최대한 용도에 맞는 변수명 2. 그냥 상수항을 더하는게 아닌 
+	'변수 + 변수'처럼 자신이 무엇을 더하는지를 확실히 알 수 있게 짜는 것.
+	3. 예를 들어, if(논리)에서 논리 값 또한 상수항을 넣는 것이 아닌 무엇에 대한 참, 거짓을 알고 싶은 건지 명시하는 것.
 */
 
 /*
-	+잔소리
-	테스트 케이스의 모두 고려하자. 맞왜틀?(맞는데 왜 틀림?) 고려안한 잘못이다.
+	잔소리 : 
+	테스트 케이스의 모두 고려하자. 맞왜틀?(맞는데 왜 틀림?) 컴퓨터는 안 틀린다 너가 틀린거다 ㅋㅋ.
 	모든 테이트케이스에서 가장 중요한 것은 최댓값, 최솟값, 아무 특정값 1개 (+변수가 0일 때)이다. (매우 중요)
-	++잔소리
-	무엇을 풀지 모르겠으면 문제를 많이 푼 동기가 푼 문제를 따라가는 것도 방법이다.
-	+++잔소리
-	응애 질문해줘. 질문받은거 중에 모두에게 알릴만한 것은 여기에 지속해서 업데이트 할거야.
-	1명의 질문으로 튜티 모두가 실수를 잡게되면 좋잖아? 질.문.해.줘
+	입력, 출력에 관한 확실한 해석 후 문제를 풀 것!
 */
-int main() {
-	// 코드를 복사해서 해당 주차의 내용을 실습하며 익혀보자.
 
+int main()
+{
+	// 다들 시험 파이팅~~
 }
